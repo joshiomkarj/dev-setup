@@ -281,7 +281,7 @@ all()
 	install_rg
 	install_kubectl
 	kubectl_aliases
-	change_owners
+	#change_owners
 	autoremove
 }
 
