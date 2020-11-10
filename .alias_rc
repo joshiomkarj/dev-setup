@@ -1,0 +1,7 @@
+#!/bin/bash
+alias gits="git status"
+alias gitl="git log"
+alias gitlol="git log --pretty --oneline"
+alias diff='colordiff'
+alias vi=vim
+alias ports='netstat -tulanp'
