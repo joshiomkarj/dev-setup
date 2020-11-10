@@ -17,10 +17,14 @@
 
 set -o xtrace
 
-PATHS=$HOME/.paths
+set -o errexit
+
+USER_HOME=/home/omkar
+
+PATHS=$USER_HOME/.paths
 touch $PATHS
 
-echo "source $PATHS" >> $HOME/.profile
+echo "source $PATHS" >> $USER_HOME/.profile
 
 update ()
 {
@@ -56,8 +60,9 @@ install_golang ()
 {
 	echo "setting up golang"
 	wget https://dl.google.com/go/go1.15.3.linux-amd64.tar.gz
+	sudo mkdir -p /usr/local/go
 	sudo tar -xvf go1.15.3.linux-amd64.tar.gz -C /usr/local/go
-	mkdir $HOME/go
+	mkdir -p $USER_HOME/go
 
 	rm go1.15.3.linux-amd64.tar.gz	
 	
@@ -71,7 +76,7 @@ install_node ()
 	echo "setting up nodejs and npm"
 	update
 	sudo apt install -y nodejs npm
-	mkdir ~/.npm-global
+	mkdir -p $USER_HOME/.npm-global
 	npm config set prefix '~/.npm-global'
 	echo 'export PATH=~/.npm-global/bin:$PATH' >> $PATHS
 	
@@ -159,7 +164,7 @@ install_numpy ()
 configure_snap_store ()
 {
 	echo "configuring snap store"
-	sudo snap install -y snap-store
+	sudo snap install snap-store
 }
 
 install_thunderbird ()
@@ -183,21 +188,21 @@ install_emacs ()
 git_prompt ()
 {
 	echo "setting up git-prompt"
-	wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > $HOME/.git-prompt.sh
-	mv .gitprompt_rc $HOME/.gitprompt_rc
-	echo 'source .gitpromptrc' >> $HOME/.bashrc
+	wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > $USER_HOME/.git-prompt.sh
+	mv .gitprompt_rc $USER_HOME/.gitprompt_rc
+	echo 'source .gitprompt_rc' >> $USER_HOME/.bashrc
 }
 
 copy_npmrc ()
 {
 	echo "setting up npmrc"
-	cp .npmrc $HOME/.npmrc
+	cp .npmrc $USER_HOME/.npmrc
 }
 
 copy_aliasrc ()
 {
 	echo "setting up aliases"
-	cp .alias_rc $HOME/.alias_rc
+	cp .alias_rc $USER_HOME/.alias_rc
 }
 
 install_postman ()
@@ -216,21 +221,21 @@ install_docker ()
 	sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 	echo "Configuring docker to not use root"
-	sudo groupadd docker
+	#sudo groupadd docker
 	sudo usermod -aG docker $USER
 }
 
 kubectl_aliases()
 {
-	wget https://raw.githubusercontent.com/ahmetb/kubectl-alias/master/.kubectl_aliases >> $HOME/.kubectl_aliases
+	wget https://raw.githubusercontent.com/ahmetb/kubectl-alias/master/.kubectl_aliases >> $USER_HOME/.kubectl_aliases
 }
 
 backup_files()
 {
-	echo "backing up config files to $HOME/.backup-configs"
-	mkdir $HOME/.backup-configs
-	cp .bashrc $HOME/.backup-configs/.bashrc
-	cp .profile $HOME/.backup-configs/.profile	
+	echo "backing up config files to $USER_HOME/.backup-configs"
+	mkdir -p $USER_HOME/.backup-configs
+	cp $USER_HOME/.bashrc $USER_HOME/.backup-configs/.bashrc
+	cp $USER_HOME/.profile $USER_HOME/.backup-configs/.profile	
 }
 
 all()
@@ -238,7 +243,7 @@ all()
 	backup_files
 	update
 	upgrade
-	build-essentials
+	build_essentials
 	install_basics
 	install_pip3
 	install_vscode
