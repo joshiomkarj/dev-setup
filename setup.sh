@@ -284,5 +284,3 @@ all()
 	#change_owners
 	autoremove
 }
-
-all
