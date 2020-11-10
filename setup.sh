@@ -192,7 +192,7 @@ git_prompt ()
 {
 	echo "setting up git-prompt"
 	wget https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > $USER_HOME/.git-prompt.sh
-	mv .gitprompt_rc $USER_HOME/.gitprompt_rc
+	cp .gitprompt_rc $USER_HOME/.gitprompt_rc
 	echo 'source .gitprompt_rc' >> $USER_HOME/.bashrc
 }
 
