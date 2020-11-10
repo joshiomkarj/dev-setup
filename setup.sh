@@ -19,7 +19,7 @@ set -o xtrace
 
 set -o errexit
 
-USER_HOME=/home/omkar
+USER_HOME=/home/$USER
 
 setup ()
 {
