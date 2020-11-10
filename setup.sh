@@ -21,10 +21,13 @@ set -o errexit
 
 USER_HOME=/home/omkar
 
-PATHS=$USER_HOME/.paths
-touch $PATHS
+setup ()
+{
+	PATHS=$USER_HOME/.paths
+	touch $PATHS
 
-echo "source $PATHS" >> $USER_HOME/.profile
+	echo "source $PATHS" >> $USER_HOME/.profile
+}
 
 update ()
 {
@@ -89,7 +92,7 @@ install_kubectl ()
 	KUBECTL_VERSION=v1.19.0
 
 	# Download the binary
-	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(KUBECTL_VERSION)/bin/linux/amd64/kubectl
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
 
 	# Provide executable permissions to the binary
 	chmod +x ./kubectl
@@ -227,7 +230,7 @@ install_docker ()
 
 kubectl_aliases()
 {
-	wget https://raw.githubusercontent.com/ahmetb/kubectl-alias/master/.kubectl_aliases >> $USER_HOME/.kubectl_aliases
+	curl https://raw.githubusercontent.com/ahmetb/kubectl-alias/master/.kubectl_aliases >> $USER_HOME/.kubectl_aliases
 }
 
 backup_files()
@@ -236,6 +239,18 @@ backup_files()
 	mkdir -p $USER_HOME/.backup-configs
 	cp $USER_HOME/.bashrc $USER_HOME/.backup-configs/.bashrc
 	cp $USER_HOME/.profile $USER_HOME/.backup-configs/.profile	
+}
+
+change_owners()
+{
+	sudo chown $USER:$USER .npmrc
+	sudo chown $USER:$USER .paths
+	sudo chown $USER:$USER .kubectl_aliases
+	sudo chown $USER:$USER .git-prompt.sh
+	sudo chown $USER:$USER .alias_rc
+	sudo chown -R $USER:$USER .backup-configs
+	sudo chown -R $USER:$USER go
+	sudo chown -R $USER:$USER .npm-global
 }
 
 all()
@@ -264,7 +279,9 @@ all()
 	install_awscli
 	install_jq_yq
 	install_rg
+	install_kubectl
 	kubectl_aliases
+	change_owners
 	autoremove
 }
 
