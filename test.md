@@ -1,3 +1,3 @@
 # mdfiletest
 
-![./alias_rc]
+![alias](./alias_rc)
