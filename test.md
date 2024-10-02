@@ -1,0 +1,3 @@
+# mdfiletest
+
+![./alias_rc]
